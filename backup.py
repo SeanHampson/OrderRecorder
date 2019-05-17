@@ -1,7 +1,7 @@
 from shutil import copyfile
 import os
 
-cpu_name = "***" #computer's id path
+cpu_name = "ohams_000" #computer's id path
 def_path = "C:\\Users\\%s\\" % cpu_name #default computer path
 backup_path = ""
 

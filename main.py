@@ -1,7 +1,3 @@
-#Upgrade data logging to spreadsheet
-#Add price to log - calculate price form order and append onto log
-#Add time stamp for delivery onto log
-
 import random, os
 
 references = []

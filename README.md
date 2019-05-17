@@ -1,3 +1,3 @@
 # OrderRecorder
 
-Allows for recording, documentation and tracking of order data.
+Submit order information to a simple text file database for later use.
