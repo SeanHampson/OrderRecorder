@@ -53,15 +53,6 @@ def display_data(file):
 	order_listw.write(contents)
 	order_listw.close()
 
-###########
-
-		#contents.insert(index, value)
-
-		#f = open("path_to_file", "w")
-		#contents = "".join(contents)
-		#f.write(contents)
-		#f.close()
-
 #============Labels==============
 #label_order_id      = Label(root, text="ORDER REF: ")
 label_order_name    = Label(root, text="NAME: ")
