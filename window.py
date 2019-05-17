@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import *
+import random, os
 
 root = Tk()                               #Creating tkinter instance
 root.resizable(width=False, height=False) #Setting window to a fixed size
@@ -21,9 +22,24 @@ def submit_info():
 		#Notifies user that 1 or more fields are empty
 		messagebox.showerror("Invalid Data", "One or more fields are empty!")
 	
-	#else:
-		#Gather values from each input and run through main.py
-		#Empty fields after
+	else:
+		order_name    = entry_order_name.get()
+		order_address = entry_order_address.get()
+		order_        = entry_order_.get()
+		order_phone   = entry_order_number.get()
+		order_due     = entry_order_due.get()
+
+		order_ref     = create_ref()
+		order_ref     = Customer(order_ref, order_name, order_address, order_, order_phone, order_due)
+
+		entry_order_name.delete(0, END)
+		entry_order_address.delete(0, END)
+		entry_order_.delete(0, END)
+		entry_order_number.delete(0, END)
+		entry_order_due.delete(0, END)
+
+		try: display_data("orders.txt")
+		except Exception as e: print(e)
 
 def display_data(file):
 	order_listr = open(file, "r")	      #Opens order file to read data
@@ -45,7 +61,65 @@ def display_data(file):
 		else:
 			order_list.insert(END, "000%i|%s %s" % (count, "  "*4, line))
 		count += 1
+##################################
+references = []
+def print_ref(index):
+	with open("orders.txt", "r") as r_order:
+		lines = r_order.readlines()
+		for x in range(1, 6):
+			print("\n%s"   % (lines[x]))
 
+def search_ref(ref_query):
+	num = 0
+	with open("references.txt", "r") as ref:
+		for line in ref.readlines():
+			if ref_query + "\n" == line:
+				with open("orders.txt", "r") as r_order:
+					for line in r_order.readlines():
+						if "Order Ref: " + ref_query + "\n" == line:
+							print_ref(num)
+							break
+						num += 1
+					break
+			else:
+				print("\nNo References Available!")
+				break
+
+
+def log_order(order_info):
+	with open("orders.txt", "a") as log:
+		log.write(order_info)
+		print("\nLog file updated")
+
+def create_ref():
+	ref = random.randint(10000, 99999)
+	with open("references.txt", "r") as ref_log:
+		for line in ref_log.readlines():
+			if line == ref:
+				ref = random.randint(10000, 99999)
+	references.append(ref)
+	with open("references.txt", "a+") as ref_add:
+		ref_add.write(str(ref) + "\n")
+	return(ref)
+
+class Customer(object):
+	def __init__(self, ref, name, address, order, number, due):
+		self.ref        = ref
+		self.name       = name
+		self.address    = address
+		self.order      = order
+		self.number     = number
+		self.due        = due
+		self.order_info = "Order Ref: %s\nName: %s\nAddress: %s\nOrder: %s\nNumber: %s\nOrder Due: %s\n\n" \
+		% (self.ref, self.name, self.address, self.order, self.number, self.due)
+		
+		print("Order Reference No. is", self.ref)
+		log_order(self.order_info)
+
+	def __repr__(self):
+		return(self.order_info)
+
+##################################
 #============Labels==============
 label_order_name    = Label(root, text="NAME: ")
 label_order_address = Label(root, text="ADDRESS: ")
@@ -102,6 +176,12 @@ order_list.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=order_list.yview)
 
 if __name__ == "__main__":
+	if len(references) < 1:
+		with open("references.txt", "r") as refs:
+			if len(refs.read()) > 0:
+				for line in refs.readlines():
+					references.append(line)
+	##########################################
 	try: display_data("orders.txt")
 	except Exception as e: print(e)
 	root.mainloop()
