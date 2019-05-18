@@ -1,12 +1,12 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import *
-import random, os
+import random, os, sys
 
 root = Tk()                               #Creating tkinter instance
 root.resizable(width=False, height=False) #Setting window to a fixed size
 root.iconbitmap("icon.ico")               #Setting icon of application window
-root.title("Order Recorder v1.0")         #Title of application
+root.title("v1.0")                        #Title of application
 
 
 def exit_program():
@@ -176,12 +176,20 @@ order_list.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=order_list.yview)
 
 if __name__ == "__main__":
-	if len(references) < 1:
-		with open("references.txt", "r") as refs:
-			if len(refs.read()) > 0:
-				for line in refs.readlines():
-					references.append(line)
-	##########################################
-	try: display_data("orders.txt")
-	except Exception as e: print(e)
-	root.mainloop()
+	try:
+		if sys.argv[1] == "a":
+			if len(references) < 1:
+				with open("references.txt", "r") as refs:
+					if len(refs.read()) > 0:
+						for line in refs.readlines():
+							references.append(line)
+			##########################################
+			try: display_data("orders.txt")
+			except Exception as e: print(e)
+			root.mainloop()
+
+		#else:
+			#accept other values to change between different uses e.g.
+			#record customer info or read/write college choices
+	except:
+		print("No mode given!")
